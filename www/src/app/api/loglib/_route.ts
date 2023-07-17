@@ -4,9 +4,8 @@ import { createServerRoutes } from "@loglib/next"
 import { db } from "@/lib/db"
 import { prismaAdapter } from "@/lib/db/custom-adapter"
 import { getCurrentUser } from "@/lib/session"
-import { siteConfig } from "@/config/site"
 
-export const { GET, POST, OPTIONS } = createServerRoutes({
+export const { GET, POST } = createServerRoutes({
   adapter: prismaAdapter(db),
   disableLocation: process.env.NODE_ENV === "development" ? true : false,
   environment: process.env.NODE_ENV === "development" ? "test" : "production",
@@ -18,7 +17,7 @@ export const { GET, POST, OPTIONS } = createServerRoutes({
         code: 400,
       }
     }
-    const id = websiteId as string
+    const id = websiteId
     if (req.method === "GET") {
       const user = await getCurrentUser()
       if (!user) return { message: "Unauthorized", code: 401 }
@@ -54,18 +53,15 @@ export const { GET, POST, OPTIONS } = createServerRoutes({
       }
     }
     if (req.method === "POST") {
-      console.log("post")
       const site = await db.website.findFirst({
         where: {
-          AND: {
-            id,
-          },
+          id,
         },
       })
       if (!site) {
         return {
           message: "Website not found",
-          code: 400,
+          code: 404,
         }
       }
     }

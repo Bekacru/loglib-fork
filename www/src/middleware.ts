@@ -1,6 +1,6 @@
 import { getToken } from "next-auth/jwt"
 import { withAuth } from "next-auth/middleware"
-import { NextResponse } from "next/server"
+import { redirect } from "next/navigation"
 
 export default withAuth(
   async function middleware(req) {
@@ -10,7 +10,7 @@ export default withAuth(
 
     if (isAuthPage) {
       if (isAuth) {
-        return NextResponse.redirect(new URL("/dashboard", req.url))
+        return redirect("/dashboard")
       }
       return null
     }
@@ -21,9 +21,7 @@ export default withAuth(
         from += req.nextUrl.search
       }
 
-      return NextResponse.redirect(
-        new URL(`/login?from=${encodeURIComponent(from)}`, req.url)
-      )
+      return redirect(`/login?from=${encodeURIComponent(from)}`)
     }
   },
   {

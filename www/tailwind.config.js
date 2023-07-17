@@ -144,6 +144,10 @@ module.exports = {
       },
     },
   },
-  // @ts-ignore
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+
+  plugins: [
+    // @ts-ignore
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+  ],
 }
